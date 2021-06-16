@@ -46,32 +46,68 @@ TMatrix *mx_identity(unsigned int n) {
 }
 
 /**
-Sort with a snake
+Sorting an array of numbers "snake" along the diagonal
 */
 void mx_sort(TMatrix *m)
 {
- // Sorting the linearized matrix
- for (int i = 0; i + 1 < m->m * m->n; ++i)
+ int size =m->n * m->m;
+
+ bubbleSort(m->a, size);
+ 
+ int x = 0;
+ int y = 0;
+ double array[m->n][m->m];
+
+ for (int i =0; i < m->n; i++)
+  for (int j =0; j < m->m; j++){
+   array[i][j]=m->a[i + j * m->n];
+  }
+
+ int index = 0;
+ while (index < size){
+   m->a[x + y * m->n] = array[index%m->n][index/m->m];
+  while (y > 0 && x < m->n - 1){
+   y--;
+   x++;
+   index++;
+   m->a[x + y * m->n] = array[index%m->n][index/m->m];
+  }
+  if (y==0 && x < m->n-1)
+   x++;
+  else
+  y++;
+  index++;
+  m->a[x + y * m->n] = array[index%m->n][index/m->m];
+
+  while (x > 0 && y < m->m - 1){
+   y++;
+   x--;
+   index++;
+   m->a[x + y * m->n] = array[index%m->n][index/m->m];
+  }
+  if (x==0 && y < m->m-1)
+   y++;
+  else
+   x++;
+  index++;
+  m->a[x + y * m->n] = array[index%m->n][index/m->m];
+
+ }
+}
+
+void bubbleSort(double *num, int size)
+{
+ // For all elements
+ for (int i = 0; i < size - 1; i++)
  {
-  for (int j = i + 1; j < m->m * m->n; ++j)
+ for (int j = (size - 1); j > i; j--) // for all elements after the i-th
+ {
+  if (num[j - 1] > num[j]) // if the current element is less than the previous one
   {
-   if (m->a[i] > m->a[j])
-   {
-    double tmp = m->a[i];
-    m->a[i] = m->a[j];
-    m->a[j] = tmp;
-   }
+  int temp = num[j - 1]; // swap them
+  num[j - 1] = num[j];
+  num[j] = temp;
   }
  }
-
- // Invert odd rows
- for (int i = 1; i < m->m; i += 2)
- {
-  for (int j = 0; j < m->n / 2; ++j)
-  {
-   double tmp = m->a[j + i * m->n];
-   m->a[j + i * m->n] = m->a[m->n - 1 - j + i * m->n];
-   m->a[m->n - 1 - j + i * m->n] = tmp;
-  }
  }
 }
