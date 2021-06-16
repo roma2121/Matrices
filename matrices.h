@@ -65,4 +65,6 @@ Sort by the 1st line
 */
 void mx_sort(TMatrix *m);
 
+void bubbleSort(double *mass, int count);
+
 #endif
